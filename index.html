@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Absen Online — BlesProduction</title>
+  <meta name="description" content="Absen Online (GPS + Selfie + Anti Dobel) — BlesProduction" />
+
+  <style>
+    :root{
+      --bg:#070A12;
+      --text:#E8EEF6;
+      --muted:#9AA4B2;
+      --line:rgba(255,255,255,.10);
+      --neon:#00F5FF;
+      --accent:#A78BFA;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      color:var(--text);
+      min-height:100vh;
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(0,245,255,.11), transparent 55%),
+        radial-gradient(900px 600px at 80% 30%, rgba(167,139,250,.10), transparent 60%),
+        var(--bg);
+      display:flex;
+      align-items:stretch;
+      justify-content:center;
+    }
+    .wrap{
+      width:100%;
+      max-width:980px;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      border-radius:16px;
+      padding:10px 12px;
+      backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .brand b{font-size:14px; letter-spacing:.2px}
+    .brand span{font-size:12px; color:var(--muted)}
+    .btns{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
+    button, a.btn{
+      appearance:none;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:800;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+    }
+    button.primary, a.btn.primary{
+      border-color:rgba(0,245,255,.25);
+      background:linear-gradient(90deg, rgba(0,245,255,.22), rgba(167,139,250,.18));
+      color:var(--neon);
+      box-shadow:0 0 20px rgba(0,245,255,.10);
+    }
+    .frameBox{
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      background:rgba(0,0,0,.18);
+      box-shadow:0 0 0 1px rgba(0,245,255,.07), 0 22px 70px rgba(0,0,0,.50);
+      flex:1;
+      min-height: calc(100vh - 120px);
+      position:relative;
+    }
+    iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      display:block;
+      background:transparent;
+    }
+    .hint{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.35;
+      margin-top:-4px;
+    }
+    .footer{
+      font-size:12px;
+      color:var(--muted);
+      text-align:center;
+      padding:6px 0 2px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(0,245,255,.25);
+      color:var(--neon);
+      background:rgba(0,245,255,.06);
+      font-weight:800;
+      font-size:12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <b>Absen Online</b>
+        <span>Hosted on GitHub • Powered by Apps Script + Spreadsheet</span>
+      </div>
+      <div class="btns">
+        <span class="pill">BlesProduction</span>
+        <button class="primary" id="btnReload">Reload Absen</button>
+        <a class="btn" id="btnOpenNew" target="_blank" rel="noopener">Buka di Tab Baru</a>
+      </div>
+    </div>
+
+    <div class="hint">
+      Catatan: Kamera & GPS akan minta izin dari browser. Jika blank/nyangkut, tekan <b>Reload Absen</b>.
+    </div>
+
+    <div class="frameBox">
+      <iframe id="absenFrame" allow="camera; geolocation" referrerpolicy="no-referrer"></iframe>
+    </div>
+
+    <div class="footer">© <span id="y"></span> BlesProduction</div>
+  </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+
+    // URL Web App Apps Script kamu
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxVdY4Myk9-H3z79EnGl89sooxLb7COTHMybgcgT__kO4lfC0TXSQyL9TDrzQD8WSAl5w/exec";
+
+    const frame = document.getElementById("absenFrame");
+    const btnReload = document.getElementById("btnReload");
+    const btnOpenNew = document.getElementById("btnOpenNew");
+
+    function loadFrame(){
+      // cache-buster biar selalu ambil versi terbaru
+      const u = new URL(WEBAPP_URL);
+      u.searchParams.set("_", Date.now().toString());
+      frame.src = u.toString();
+      btnOpenNew.href = WEBAPP_URL;
+    }
+
+    btnReload.addEventListener("click", loadFrame);
+    loadFrame();
+  </script>
+</body>
+</html>
